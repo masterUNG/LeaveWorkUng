@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1057596101115",
+    "project_id": "leaveworkung",
+    "storage_bucket": "leaveworkung.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057596101115:android:d489246f28ba17ea993b5e",
+        "android_client_info": {
+          "package_name": "com.flutterthailand.leaveworkung"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057596101115-71r5mse02n8qu9qvm6hgr63jpvnb8gda.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ4DmVUovtRCKp2_CiFm9mmLFbGKY0iok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057596101115-71r5mse02n8qu9qvm6hgr63jpvnb8gda.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
