@@ -2,14 +2,45 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:leaveworkung/models/news_model.dart';
 import 'package:leaveworkung/models/user_model.dart';
+import 'package:leaveworkung/states/add_profile_officer.dart';
 import 'package:leaveworkung/utility/app_controller.dart';
+import 'package:leaveworkung/utility/app_dialog.dart';
+import 'package:leaveworkung/widgets/widget_text_button.dart';
 
 class AppService {
+  Future<void> findUserLogin({required BuildContext context}) async {
+    AppController appController = Get.put(AppController());
+    var user = FirebaseAuth.instance.currentUser;
+
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      UserModel model = UserModel.fromMap(value.data()!);
+      print('userModelLogin ---> ${model.toMap()}');
+
+      appController.userModelLogins.add(model);
+      if ((model.name.isEmpty) || (model.surname.isEmpty)) {
+        AppDialog(context: context).normalDialog(
+            title: 'Please Complete You Profile',
+            actionWidget: WidgetTextButton(
+              label: 'Go to Complete Profile',
+              pressFunc: () {
+                Get.offAll(const AddProfileOfficer());
+              },
+            ));
+      }
+    });
+  }
+
   Future<void> readNews() async {
     AppController appController = Get.put(AppController());
 

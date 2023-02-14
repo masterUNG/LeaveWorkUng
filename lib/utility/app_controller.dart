@@ -9,6 +9,7 @@ class AppController extends GetxController {
   RxList userModels = <UserModel>[].obs;
   RxList files = <File>[].obs;
   RxString urlImage = ''.obs;
-
   RxList newsModels = <NewsModel>[].obs;
+
+  RxList userModelLogins = <UserModel>[].obs;
 }
