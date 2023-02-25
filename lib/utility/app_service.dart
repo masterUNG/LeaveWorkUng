@@ -15,6 +15,15 @@ import 'package:leaveworkung/utility/app_dialog.dart';
 import 'package:leaveworkung/widgets/widget_text_button.dart';
 
 class AppService {
+  Future<void> editUser({required UserModel userModel}) async {
+    var user = FirebaseAuth.instance.currentUser;
+
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user!.uid)
+        .update(userModel.toMap());
+  }
+
   Future<void> findUserLogin({required BuildContext context}) async {
     AppController appController = Get.put(AppController());
     var user = FirebaseAuth.instance.currentUser;
@@ -87,6 +96,8 @@ class AppService {
     if (result != null) {
       appController.files.add(File(result.path));
     }
+
+    print('files on takePhoto --> ${appController.files.length}');
   }
 
   Future<void> readOfficerUser() async {
