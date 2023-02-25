@@ -19,4 +19,6 @@ class AppController extends GetxController {
 
   RxList<DateTime?> statrDateTimes = <DateTime?>[].obs;
   RxList<DateTime?> endDateTimes = <DateTime?>[].obs;
+
+  RxList<UserModel> adminUserModels = <UserModel>[].obs;
 }

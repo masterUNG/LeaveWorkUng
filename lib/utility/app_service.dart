@@ -2,7 +2,9 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,9 +17,66 @@ import 'package:leaveworkung/models/user_model.dart';
 import 'package:leaveworkung/states/add_profile_officer.dart';
 import 'package:leaveworkung/utility/app_controller.dart';
 import 'package:leaveworkung/utility/app_dialog.dart';
+import 'package:leaveworkung/utility/app_snackbar.dart';
 import 'package:leaveworkung/widgets/widget_text_button.dart';
 
 class AppService {
+  Future<void> findAdminUserModel() async {
+    AppController appController = Get.put(AppController());
+    await FirebaseFirestore.instance
+        .collection('user')
+        .where('status', isEqualTo: '/admin')
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        UserModel userModel = UserModel.fromMap(element.data());
+        appController.adminUserModels.add(userModel);
+      }
+    });
+  }
+
+  Future<void> processSendNoti(
+      {required String token,
+      required String title,
+      required String body}) async {
+    String urlApi =
+        'https://www.androidthai.in.th/fluttertraining/noti/apiNotiBoy.php?isAdd=true&token=$token&title=$title&body=$body';
+    await Dio().get(urlApi);
+  }
+
+  Future<void> setupMessage() async {
+    var user = FirebaseAuth.instance.currentUser;
+    AppController appController = Get.put(AppController());
+
+    FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    String? token = await firebaseMessaging.getToken();
+    print('token --> $token');
+
+    if ((token != null) && (appController.userModelLogins.isNotEmpty)) {
+      Map<String, dynamic> map = appController.userModelLogins.last.toMap();
+      map['token'] = token;
+      print('map ---> $map');
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(user!.uid)
+          .update(map);
+    }
+
+    FirebaseMessaging.onMessage.listen((event) {
+      String? title = event.notification!.title;
+      String? body = event.notification!.body;
+
+      AppSnackbar().normalSnackbar(title: title!, detail: body!);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      String? title = event.notification!.title;
+      String? body = event.notification!.body;
+
+      AppSnackbar().normalSnackbar(title: title!, detail: body!);
+    });
+  }
+
   Future<void> processInsertLeaveWork(
       {required LeaveWorkModel leaveWorkModel}) async {
     var user = FirebaseAuth.instance.currentUser;
@@ -34,7 +93,6 @@ class AppService {
       appController.statrDateTimes.clear();
       appController.endDateTimes.clear();
       print('Insert LeaveWork Success');
-      
     });
   }
 

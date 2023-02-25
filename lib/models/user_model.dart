@@ -11,6 +11,7 @@ class UserModel {
   final String surname;
   final String email;
   final String password;
+  final String? token;
   UserModel({
     required this.division,
     required this.idofficer,
@@ -21,6 +22,7 @@ class UserModel {
     required this.surname,
     required this.email,
     required this.password,
+    this.token,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,6 +36,7 @@ class UserModel {
       'surname': surname,
       'email': email,
       'password': password,
+      'token': token,
     };
   }
 
@@ -48,6 +51,7 @@ class UserModel {
       surname: (map['surname'] ?? '') as String,
       email: (map['email'] ?? '') as String,
       password: (map['password'] ?? '') as String,
+      token: map['token'] ?? '',
     );
   }
 

@@ -158,7 +158,12 @@ class _LeaveworkOfficerState extends State<LeaveworkOfficer> {
                               .processInsertLeaveWork(
                                   leaveWorkModel: leaveWorkModel)
                               .then((value) {
-                            appController.indexBodyOfficer.value = 0;
+                            AppService()
+                                .processSendNoti(
+                                    token: appController.adminUserModels.last.token!, title: 'แจ้งเตือนมีการลา', body: 'ขออนุญาติลา โปรดอนุเคราะห์')
+                                .then((value) {
+                                  appController.indexBodyOfficer.value = 0;
+                                });
                           });
                         }
                       },

@@ -4,6 +4,7 @@ import 'package:leaveworkung/bodys/list_news_admin.dart';
 import 'package:leaveworkung/bodys/list_officer_admin.dart';
 import 'package:leaveworkung/utility/app_constant.dart';
 import 'package:leaveworkung/utility/app_controller.dart';
+import 'package:leaveworkung/utility/app_service.dart';
 import 'package:leaveworkung/widgets/widget_text.dart';
 
 class MainHomeAdmin extends StatefulWidget {
@@ -34,6 +35,10 @@ class _MainHomeAdminState extends State<MainHomeAdmin> {
   @override
   void initState() {
     super.initState();
+
+    AppService().findUserLogin(context: context).then((value) {
+      AppService().setupMessage();
+    });
 
     for (var i = 0; i < titles.length; i++) {
       bottonNavBarItems.add(
