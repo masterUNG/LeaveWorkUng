@@ -7,7 +7,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:leaveworkung/models/leave_model.dart';
+import 'package:leaveworkung/models/leave_work_model.dart';
 import 'package:leaveworkung/models/news_model.dart';
 import 'package:leaveworkung/models/user_model.dart';
 import 'package:leaveworkung/states/add_profile_officer.dart';
@@ -16,6 +18,32 @@ import 'package:leaveworkung/utility/app_dialog.dart';
 import 'package:leaveworkung/widgets/widget_text_button.dart';
 
 class AppService {
+  Future<void> processInsertLeaveWork(
+      {required LeaveWorkModel leaveWorkModel}) async {
+    var user = FirebaseAuth.instance.currentUser;
+    AppController appController = Get.put(AppController());
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user!.uid)
+        .collection('leavework')
+        .doc()
+        .set(leaveWorkModel.toMap())
+        .then((value) {
+      appController.chooseLeaves.clear();
+      appController.chooseLeaves.add(null);
+      appController.statrDateTimes.clear();
+      appController.endDateTimes.clear();
+      print('Insert LeaveWork Success');
+      
+    });
+  }
+
+  String changeToFormatDateTime({required DateTime dateTime}) {
+    DateFormat dateFormat = DateFormat('dd/MMM/yyyy');
+    String string = dateFormat.format(dateTime);
+    return string;
+  }
+
   Future<void> readAllLeave() async {
     AppController appController = Get.put(AppController());
     await FirebaseFirestore.instance.collection('leave').get().then((value) {

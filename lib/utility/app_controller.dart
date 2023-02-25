@@ -16,4 +16,7 @@ class AppController extends GetxController {
 
   RxList<LeaveModel> leaveModels = <LeaveModel>[].obs;
   RxList<String?> chooseLeaves = <String?>[null].obs;
+
+  RxList<DateTime?> statrDateTimes = <DateTime?>[].obs;
+  RxList<DateTime?> endDateTimes = <DateTime?>[].obs;
 }
