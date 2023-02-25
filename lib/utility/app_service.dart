@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:leaveworkung/models/leave_model.dart';
 import 'package:leaveworkung/models/news_model.dart';
 import 'package:leaveworkung/models/user_model.dart';
 import 'package:leaveworkung/states/add_profile_officer.dart';
@@ -15,6 +16,16 @@ import 'package:leaveworkung/utility/app_dialog.dart';
 import 'package:leaveworkung/widgets/widget_text_button.dart';
 
 class AppService {
+  Future<void> readAllLeave() async {
+    AppController appController = Get.put(AppController());
+    await FirebaseFirestore.instance.collection('leave').get().then((value) {
+      for (var element in value.docs) {
+        LeaveModel leaveModel = LeaveModel.fromMap(element.data());
+        appController.leaveModels.add(leaveModel);
+      }
+    });
+  }
+
   Future<void> editUser({required UserModel userModel}) async {
     var user = FirebaseAuth.instance.currentUser;
 

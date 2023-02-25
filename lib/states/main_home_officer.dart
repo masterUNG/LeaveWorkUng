@@ -48,6 +48,7 @@ class _MainHomeOfficerState extends State<MainHomeOfficer> {
 
     AppService().findUserLogin(context: context);
     AppService().readNews();
+    AppService().readAllLeave();
 
     for (var i = 0; i < titles.length; i++) {
       bottonNavItems.add(
