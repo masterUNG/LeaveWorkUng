@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:leaveworkung/models/leave_model.dart';
+import 'package:leaveworkung/models/leave_work_model.dart';
 import 'package:leaveworkung/models/news_model.dart';
 import 'package:leaveworkung/models/user_model.dart';
 
@@ -21,4 +22,7 @@ class AppController extends GetxController {
   RxList<DateTime?> endDateTimes = <DateTime?>[].obs;
 
   RxList<UserModel> adminUserModels = <UserModel>[].obs;
+  RxList<LeaveWorkModel> leaveWorkModels = <LeaveWorkModel>[].obs;
+  RxList<String> nameOfficers =<String>[].obs;
+  RxList<String> docIdUserOfficers =<String>[].obs;
 }

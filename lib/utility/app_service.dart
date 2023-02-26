@@ -21,6 +21,42 @@ import 'package:leaveworkung/utility/app_snackbar.dart';
 import 'package:leaveworkung/widgets/widget_text_button.dart';
 
 class AppService {
+  Future<void> readAllLeaveworkAdmin() async {
+    AppController appController = Get.put(AppController());
+
+    if (appController.leaveWorkModels.isNotEmpty) {
+      appController.leaveWorkModels.clear();
+      appController.nameOfficers.clear();
+      appController.docIdUserOfficers.clear();
+    }
+
+    await FirebaseFirestore.instance
+        .collection('user')
+        .get()
+        .then((value) async {
+      for (var element in value.docs) {
+        UserModel userModel = UserModel.fromMap(element.data());
+
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(element.id)
+            .collection('leavework')
+            .get()
+            .then((value) {
+          if (value.docs.isNotEmpty) {
+            for (var element2 in value.docs) {
+              LeaveWorkModel leaveWorkModel =
+                  LeaveWorkModel.fromMap(element2.data());
+              appController.leaveWorkModels.add(leaveWorkModel);
+              appController.docIdUserOfficers.add(element.id);
+              appController.nameOfficers.add(userModel.name);
+            }
+          }
+        });
+      }
+    });
+  }
+
   Future<void> findAdminUserModel() async {
     AppController appController = Get.put(AppController());
     await FirebaseFirestore.instance

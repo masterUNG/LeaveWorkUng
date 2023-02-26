@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:leaveworkung/bodys/list_listwork_admin.dart';
 import 'package:leaveworkung/bodys/list_news_admin.dart';
 import 'package:leaveworkung/bodys/list_officer_admin.dart';
 import 'package:leaveworkung/utility/app_constant.dart';
@@ -17,16 +18,19 @@ class MainHomeAdmin extends StatefulWidget {
 class _MainHomeAdminState extends State<MainHomeAdmin> {
   var titles = <String>[
     'Officer',
+    'Leavework',
     'News',
   ];
 
   var iconDatas = <IconData>[
     Icons.person,
+    Icons.work_off,
     Icons.newspaper,
   ];
 
   var bodys = <Widget>[
     const ListOfficerAdmin(),
+    const ListLeaveWorkAdmin(),
     const ListNewsAdmin(),
   ];
 
@@ -39,6 +43,8 @@ class _MainHomeAdminState extends State<MainHomeAdmin> {
     AppService().findUserLogin(context: context).then((value) {
       AppService().setupMessage();
     });
+
+    AppService().readAllLeaveworkAdmin();
 
     for (var i = 0; i < titles.length; i++) {
       bottonNavBarItems.add(
@@ -65,6 +71,7 @@ class _MainHomeAdminState extends State<MainHomeAdmin> {
             ),
             body: bodys[appController.indexBodyAdmin.value],
             bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
               items: bottonNavBarItems,
               currentIndex: appController.indexBodyAdmin.value,
               onTap: (value) {
