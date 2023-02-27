@@ -21,6 +21,29 @@ import 'package:leaveworkung/utility/app_snackbar.dart';
 import 'package:leaveworkung/widgets/widget_text_button.dart';
 
 class AppService {
+  Future<void> processApprove(
+      {required String docIdOfficer, required String docIdLeaveWork}) async {
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(docIdOfficer)
+        .collection('leavework')
+        .doc(docIdLeaveWork)
+        .get()
+        .then((value) async {
+      LeaveWorkModel leaveWorkModel = LeaveWorkModel.fromMap(value.data()!);
+      print('leaveWorkModel ---> ${leaveWorkModel.toMap()}');
+      Map<String, dynamic> map = leaveWorkModel.toMap();
+      map['approve'] = 'approve';
+
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(docIdOfficer)
+          .collection('leavework')
+          .doc(docIdLeaveWork)
+          .update(map);
+    });
+  }
+
   Future<void> readAllLeaveworkAdmin() async {
     AppController appController = Get.put(AppController());
 
@@ -28,6 +51,7 @@ class AppService {
       appController.leaveWorkModels.clear();
       appController.nameOfficers.clear();
       appController.docIdUserOfficers.clear();
+      appController.docIdLeaveWorks.clear();
     }
 
     await FirebaseFirestore.instance
@@ -50,6 +74,7 @@ class AppService {
               appController.leaveWorkModels.add(leaveWorkModel);
               appController.docIdUserOfficers.add(element.id);
               appController.nameOfficers.add(userModel.name);
+              appController.docIdLeaveWorks.add(element2.id);
             }
           }
         });

@@ -3,8 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leaveworkung/utility/app_controller.dart';
+import 'package:leaveworkung/utility/app_dialog.dart';
 import 'package:leaveworkung/utility/app_service.dart';
+import 'package:leaveworkung/widgets/widget_icon_button.dart';
 import 'package:leaveworkung/widgets/widget_text.dart';
+import 'package:leaveworkung/widgets/widget_text_button.dart';
 
 class ListLeaveWorkAdmin extends StatelessWidget {
   const ListLeaveWorkAdmin({super.key});
@@ -43,7 +46,49 @@ class ListLeaveWorkAdmin extends StatelessWidget {
                                           .toDate())),
                             ],
                           ),
-                          WidgetText(text: appController.leaveWorkModels[index].approve),
+                          Row(
+                            children: [
+                              WidgetText(
+                                  text: appController
+                                      .leaveWorkModels[index].approve),
+                              appController.leaveWorkModels[index].approve ==
+                                      'require'
+                                  ? WidgetIconButton(
+                                      iconData: Icons.approval,
+                                      tapFunc: () {
+                                        print(
+                                            'click docIdUserOfficer --> ${appController.docIdUserOfficers[index]}');
+                                        print(
+                                            'click docIdLeaveWork --> ${appController.docIdLeaveWorks[index]}');
+
+                                        AppDialog(context: context)
+                                            .normalDialog(
+                                                title: 'Confirm Approve ?',
+                                                actionWidget: WidgetTextButton(
+                                                  label: 'Confirm Approve',
+                                                  pressFunc: () {
+                                                    AppService()
+                                                        .processApprove(
+                                                            docIdOfficer:
+                                                                appController
+                                                                        .docIdUserOfficers[
+                                                                    index],
+                                                            docIdLeaveWork:
+                                                                appController
+                                                                        .docIdLeaveWorks[
+                                                                    index])
+                                                        .then((value) {
+                                                      AppService()
+                                                          .readAllLeaveworkAdmin();
+                                                      Get.back();
+                                                    });
+                                                  },
+                                                ));
+                                      },
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
                         ],
                       ),
                     ),

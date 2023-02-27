@@ -25,4 +25,5 @@ class AppController extends GetxController {
   RxList<LeaveWorkModel> leaveWorkModels = <LeaveWorkModel>[].obs;
   RxList<String> nameOfficers =<String>[].obs;
   RxList<String> docIdUserOfficers =<String>[].obs;
+  RxList<String> docIdLeaveWorks = <String>[].obs;
 }
